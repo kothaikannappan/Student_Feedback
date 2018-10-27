@@ -15,11 +15,13 @@ public class Msql_User_profile{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			// Setup the connection with the DB
 
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/student_feedback?useSSL=false", "root", "admin");
+			connection = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/Java_assignment2?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"root", "Saibaba1995");
 			
 			
 		} catch (Exception e) {
-			System.out.println("Error setting up connectino");
+			System.out.println("Error setting up connection");
 			e.printStackTrace();
 		}
 		return connection;
