@@ -1,0 +1,358 @@
+@import "compass/css3";
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  background:
+    linear-gradient(45deg, hsla(352, 96%, 45%, 1) 0%, hsla(352, 96%, 45%, 0) 70%),
+    linear-gradient(135deg, hsla(253, 95%, 42%, 1) 10%, hsla(253, 95%, 42%, 0) 80%),
+    linear-gradient(225deg, hsla(179, 91%, 45%, 1) 10%, hsla(179, 91%, 45%, 0) 80%),
+    linear-gradient(315deg, hsla(119, 96%, 49%, 1) 100%, hsla(119, 96%, 49%, 0) 70%);
+}
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.menu {
+  @extend .absolute-center;
+  width: 5em;
+  height: 5em;
+
+  .btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255,255,255, 0.15);
+    opacity: 0;
+    z-index: -10;
+    cursor: pointer;
+    transition: opacity 1s, z-index 0.3s, transform 1s;
+    transform: translateX(0);
+
+    .fa {
+      @extend .absolute-center;
+      font-size: 3em;
+      transition: color 0.3s;
+    }
+    
+    &:hover .fa {
+      color: rgba(255,255,255, 0.7);
+    }
+
+    &.trigger {
+      opacity: 1;
+      z-index: 100;
+      cursor: pointer;
+      transition: transform 0.3s;
+      
+      &:hover {
+        transform: scale(1.2);
+        
+        .line {
+          background-color: rgba(255,255,255, 0.7);
+          
+          &:before, &:after {
+            background-color: rgba(255,255,255, 0.7);
+          }
+        }
+      }
+
+      .line {
+        @extend .absolute-center;
+        width: 60%;
+        height: 6px;
+        background: #000;
+        border-radius: 6px;
+        transition: background-color 0.3s, height 0.3s, top 0.3s;
+
+        &:before, &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          left: 0;
+          width: 100%;
+          height: 6px;
+          background: #000;
+          border-radius: 6px;
+          transition: background-color 0.3s, transform 0.3s;
+        }
+        &:before {
+          top: -12px;
+          transform-origin: 15% 100%;
+        }
+        &:after {
+          top: 12px;
+          transform-origin: 25% 30%;
+        }
+      }
+    }
+  }
+
+  .rotater {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 50%;
+  }
+
+  &.active {
+    
+    .btn-icon {
+      opacity: 1;
+      z-index: 50;
+    }
+    
+    .trigger {
+      
+      .line {
+        height: 0px;
+        top: 45%;
+        
+        &:before {
+          transform: rotate(45deg);
+          width: 110%;
+        }
+        &:after {
+          transform: rotate(-45deg);
+          width: 110%; 
+        }
+      }
+    }
+  }
+}
+
+$numOfElems: 8;
+
+@for $i from 1 through $numOfElems {
+  $deg: 360deg / $numOfElems;
+  .rotater:nth-child(#{$i}) {
+    transform: rotate($deg/-2 + $deg * ($i - 1));
+  }
+
+  .menu.active {
+    .rotater:nth-child(#{$i}) .btn-icon {
+      transform: translateY(-10em) rotate($deg/2 - $deg * ($i - 1)); 
+    }
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #fff;
+  font-size: 16px;
+}
+
+.pen-wrapper {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 160px);
+  min-height: 500px;
+  justify-content: center;
+  align-items: center;
+  
+  @media screen and (max-height: 800px) {
+    padding-top: 40px;
+    align-items: flex-start;
+  }
+}
+.pen-title {
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  padding: 20px 0;
+}
+
+// -----------------
+// Nav
+// -----------------
+.nav {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.nav__inner {
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 150px;
+  height: 150px;
+  padding: 15px;
+  border-radius: (150px / 2);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: inset 0px 0px 12px rgba(0,0,0,.15);
+  transition: height .3s ease-in;
+  
+  input:checked + .menu-button + & {
+    height: 400px;
+  }
+}
+
+.nav__avatar {
+  position: relative;
+  overflow: hidden;
+  
+  &, img {
+    border-radius: 50%;
+  }
+}
+
+// -----------------
+// Menu button
+// -----------------
+.menu-button__input { display: none; }
+.menu-button {
+  position: absolute;
+  right: 0;  top: 0;
+  z-index: 2;
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 11px 0px rgba(255, 255, 255, 1);
+  background: linear-gradient(#ff4184 0%, #ff005a 100%, #ff005a 100%);
+  transform: scale(.1);
+  opacity: 0;
+  transition: transform .3s ease-in,
+              opacity .3s ease-in;  
+  cursor: pointer;
+  
+  .touch &,
+  .nav:hover &,
+  input:checked + & {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.menu-button__icon {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  width: 25px; 
+  height: 20px;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.menu-button__icon-strip {
+  top: 50%;
+  margin-top: -2px;
+  
+  &,
+  &:before,
+  &:after {
+    position: absolute;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: transform .3s ease,
+                top .3s ease,
+                bottom .3s ease,
+                opacity .3s ease;
+  }
+  
+  &:before,
+  &:after {
+    content: '';
+    transform-origin: center;
+  }
+  
+  &:before {
+    top: -7px;
+    margin-top: -2px;
+  }
+  
+  &:after {
+    bottom: -7px;
+    margin-bottom: -2px;
+  }
+  
+  input:checked + .menu-button & {
+    background-color: rgba(255,255,255, 0);
+    
+    &:before {
+      top: 50%;
+      transform: rotate(45deg);
+    }
+    
+    &:after {
+      bottom: 50%;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+
+// -----------------
+// Nav List
+// -----------------
+.nav-list  {
+  width: 30px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.nav-list__item  {
+  margin-top: 20px;
+  opacity: 0;
+  text-align: center;
+  transition: opacity .3s ease-in;
+        
+  input:checked + .menu-button + .nav__inner & {
+    opacity: 1;
+    
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        transition-delay: 0.1s * $i;
+      }
+    }
+  }
+}
+
+.nav-list__url  {
+  color: #6d6e76;
+  transition: color .3s ease;
+  
+  &:hover {
+    color: #ff0b61;
+  }
+}
+
+.nav-list__icon  {
+  font-size: 30px;
+}
